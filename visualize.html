@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='utf-8'>
+  <meta content='width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0' name='viewport'>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  <title>SIKA-North Grants and Activities Visualization</title>
+
+
+  <link href='//api.tiles.mapbox.com/mapbox.js/v1.5.1/mapbox.css' rel='stylesheet' />
+  <link href='jquery-ui-1.10.3.custom.css' rel='stylesheet' />
+  
+  <script src='d3.min.js' type='text/javascript'></script>
+
+  <script src='crossfilter.js' type='text/javascript'></script>
+  <script src='dc.min.js' type='text/javascript'></script>
+  <script src='jquery-1.9.1.min.js' type='text/javascript'></script>
+  <script src='jquery-ui-1.10.3.custom.min.js' type='text/javascript'></script>
+  <script src='bootstrap.min.js' type='text/javascript'></script>
+
+    <script src='//api.tiles.mapbox.com/mapbox.js/v1.5.1/mapbox.js'></script>
+
+        <link rel="stylesheet" href="MarkerCluster.css" />
+        <link rel="stylesheet" href="MarkerCluster.Default.css" />
+        <!--[if lte IE 8]><link rel="stylesheet" href="MarkerCluster.Default.ie.css" /><![endif]-->
+        <script src="leaflet.markercluster-src.js"></script>
+
+
+
+  <link href='bootstrap.min.css' rel='stylesheet' type='text/css'>
+  <link href='dc.css' rel='stylesheet' type='text/css'>
+
+  <style type="text/css">
+  #map{
+    height:800px;
+    width:100%;
+  }
+  .button{
+    font-size: 15px;
+    white-space: nowrap;
+    text-align: center;
+    width: 190px;
+    margin: 0 0 25px 0px;
+    line-height: 20px;
+    display: inline-block;
+    text-decoration: none;
+    padding: 12px 10px;
+    text-transform: uppercase;
+    cursor: pointer;
+    background: #B7BEC2;
+    color: #fff;
+    position: relative;
+    border-radius: 2px;
+    text-shadow: 0 1px 1px rgba(0,0,0,0.2);
+  }
+  .button-small{
+    font-size: 13px;
+    white-space: nowrap;
+    text-align: center;
+    width: 100px;
+    margin: 0 0 4px 0px;
+    line-height: 10px;
+    display: inline-block;
+    text-decoration: none;
+    padding: 6px 5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    background: #B7BEC2;
+    color: #fff;
+    position: relative;
+    border-radius: 2px;
+    text-shadow: 0 1px 1px rgba(0,0,0,0.2);
+  }
+  .active{
+    background-color: #60b7e1;
+  }
+  .button:hover, .button-small:hover{
+    background-color: #3da1d1;
+  }
+  .span6{
+    width:280px;
+  }
+ .piechart-wrapper h4{
+   text-align:center;
+}
+.piechart-wrapper{
+  width:250px;
+  display:inline-block;
+}
+.popup_description{
+  font-size: 11px;
+}
+.dc-chart text.pie-slice{
+  fill:black;
+}
+.dc-table-row ._0{
+  width:80%;
+}
+.dc-table-row ._1{
+  width:20%;
+}
+div.header{
+  -webkit-box-shadow: 0 4px 4px -2px #AFAFAF;
+-moz-box-shadow: 0 4px 4px -2px #AFAFAF;
+box-shadow: 0 4px 4px -2px #AFAFAF;
+position: fixed;
+width: 100%;
+background-color: rgba(157, 204, 226, 0.95);
+text-align: center;
+z-index:2000;
+height:30px;
+padding-top:7px;
+}
+div.header a{
+  margin-left:50px;
+  font-size:22px;
+}
+div.container{
+  width:100%;
+}
+div.span12{
+  width:100%;
+}
+.theaccordion-wrapper{
+  width:20%;
+  min-width:280px;
+  height:150px;
+  display: inline-block;
+  position: relative;
+  vertical-align: top;
+}
+
+h3.ui-state-default{
+  background-color:#B7BEC2;
+  border: 1px solid #B7BEC2;
+  
+}
+h3.ui-state-active{
+  background-color:#60b7e1;
+  border: 1px solid #60b7e1;
+}
+div.ui-widget-content{
+  background-color:white;
+}
+.span12 h3{
+  color:black;
+}
+.row h4{
+  color:black;
+}
+.majorwrapper{
+    width:20%;
+  display: inline-block;
+  position: relative;
+  vertical-align: top;
+  min-width: 300px;
+}
+.instructions{
+  padding-left:20px;
+}
+.inline-options{
+  display:inline-block;
+  text-align:center;
+}
+div.row{
+  margin-left:0px;
+}
+.closebox{
+  font-weight: 700;
+  display: inline-block;
+  padding-right: 5px;
+  cursor: pointer;
+}
+.filteritem{
+  background-color: #60b7e1;
+padding: 5px;
+margin-left: 7px;
+}
+
+  </style>
+</head>
+
+<body>
+
+
+
+<div class='header'><div style = "font-family: Tahoma; font-size: 10pt;  color: #404040; float:right;" align="right">Logout</div><a href="#mapset" class="toplink">Map and Charts</a><a href="#tables" class="toplink">Tables</a></span></div>
+<br>
+<br>
+<div id="unsupported" style="height:200px;width:100%;position:absolute;z-index: 10000; background-color: orange; font-size: 22px; padding: 20px;display:none;">You are using an unsupported browser.  Please use better than Internet Explorer 9, Chrome, Firefox, or Safari.</div>
+<div class='container' id='main-container'>
+<div class='content'>
+<div class='container' style='font: 12px sans-serif;'>
+  <h1 style="text-align: center;">SIKA-North Grants and Activities</h1>
+    <div class='row'>
+      <div class='instructions'>
+              <h2>Instructions</h2>
+              Click any part of the chart to filter.  For example, if you want to see only grants that are "cleared", turn off activities by clicking the "activities" button, and then click on the pie chart section that says "cleared".<br>
+            This map displays the security zones and grants and activities of the SIKA-North project.  Click on <div style="width:20px;height:20px;background-image:url('map_symbols.png');background-position-x:0px;background-position-y:0px;display:inline-block;"></div> to see all grants and activities in this area.  <div style="width:20px;height:20px;background-image:url('map_symbols.png');background-position-x:40px;background-position-y:0px;display:inline-block;"></div> represent grants, and <div style="width:20px;height:20px;background-image:url('map_symbols.png');background-position-x:20px;background-position-y:0px;display:inline-block;"></div> represent activities.
+            <br>
+
+            
+      </div>
+    </div>
+    <div class='row' id='mapset' style="padding-top:30px;text-align: center; ">
+      <div class="inline-options" style="text-align: center;">
+        <h3>Project Filter:</h3>
+        <span class="button filterbutton active" id="grants_toggle">Grants</span>
+        <span class="button filterbutton active" id="activities_toggle">Activities</span>
+      </div>
+      <div class="inline-options" style="text-align: center;">
+        <h3>Map Layers:</h3>
+        <span class="button active" id="map_dots">Project Information</span>
+        <span class="button active" id="map_districts">Security Zones</span>
+      </div>
+
+    </div>
+  <div class="row">
+    <div id="resetallfilters" class="button-small" style="float:right">Reset Filters</div><div class="current-filters"></div>
+  </div>
+  <div class='row' style="width:78%;display:inline-block;">
+    <div class='span12' id='mapplace'>
+      <div id="map"></div>
+    </div>
+  </div>
+
+  <span class="majorwrapper">
+
+
+
+  <div id="accordion">
+  <h3>Count Graphs</h3>
+
+    <div class='accord-row'>
+      <div class='span12'>
+        <h3>Count</h3>
+        <div class='row'>
+         <div class='piechart-wrapper'>
+          <h4>By Type</h4>
+          <div class='pie-graph span6 inlinechart filteredelement' id='dc-type_count_main'></div>
+          </div>
+<div class='piechart-wrapper'>
+          <h4>By Sub-Component</h4>
+          <div class='pie-graph span6 inlinechart filteredelement' id='dc-component_count_main'> </div>
+          </div>
+<div class='piechart-wrapper'>
+          <h4>By Status</h4>
+          <div class='pie-graph span6  inlinechart filteredelement filteredelement' id='dc-status_count_main'> </div>
+    </div>
+        </div>
+      </div>
+    </div>
+
+  <h3>Award Amount Graphs</h3>
+    <div class='accord-row'>
+      <div class='span12'>
+        <h3>Award Amount</h3>
+        <div class='row'>
+
+<div class='piechart-wrapper'>
+          <h4>By Type</h4>
+          <div class='pie-graph span6 inlinechart filteredelement' id='dc-type_award_main'></div>
+          </div>
+<div class='piechart-wrapper'>
+          <h4>By Sub-Component</h4>
+          <div class='pie-graph span6 inlinechart filteredelement' id='dc-component_award_main'> </div>
+          </div>
+<div class='piechart-wrapper'>
+          <h4>By Status</h4>
+          <div class='pie-graph span6  inlinechart filteredelement' id='dc-status_award_main'> </div>
+</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</span>
+
+
+  <div class='row'>
+    <h4>Count Start Date</h4>
+    <div class='span12 filteredelement' id='dc-starttime-amount'>
+      
+    </div>
+    <h4>Count End Date</h4>
+    <div class='span12 filteredelement' id='dc-endtime-amount'>
+      
+    </div>
+  </div>
+
+
+  <div class='row' id='tables' style="padding-top:30px;">
+  <div class='pie-graph span12'>
+      <table class='table table-hover' id='dc-table-type'>
+        <thead>
+          <tr class='header'>
+            <th>Type</th>
+            <th>Count</th>
+          </tr>
+        </thead>
+      </table>
+      <table class='table table-hover' id='dc-table-status'>
+        <thead>
+          <tr class='header'>
+            <th>Status</th>
+            <th>Count</th>
+          </tr>
+        </thead>
+      </table>
+      <table class='table table-hover' id='dc-table-component'>
+        <thead>
+          <tr class='header'>
+            <th>Component</th>
+            <th>Count</th>
+          </tr>
+        </thead>
+      </table>
+
+  </div>
+
+ 
+
+
+</div>
+</div>
+</div>
+  
+<script>
+
+  
+/**********************************
+* Step0: Load data from json file *
+**********************************/
+var facts;
+var byLocation;
+var byLocationGroup;
+var districtValue;
+var districtCountGroup;
+var geojson;
+var currentlayer;
+var markerLayer,markers;
+var chartset = {};
+
+// load data from a csv file
+
+
+//$.getJSON('opengrants',null,function(data){
+$.ajax({
+  url: "opengrants",
+}).done(function(msg) {
+
+    var data = $.parseJSON( msg)
+
+
+//d3.json("opengrants?OpenAgent", function(error, data) {
+//d3.csv("SIKA_Data.csv", function (data) {
+
+  // format our data
+  var dtgFormat = d3.time.format("%m/%d/%Y");
+  
+  data.forEach(function(d) { 
+    // Activity_No, Status, Sub_Component, Activity_Title, AType, Crosscutting, Dist_Name, DataType
+    if (! d.Start_Date_Current){
+      d.dtg_start = dtgFormat.parse("3/14/2001");
+    }
+    else{
+      d.dtg_start   = dtgFormat.parse(d.Start_Date_Current); //substr? 
+    }
+    if (! d.End_Date_Current){
+      d.dtg_end = dtgFormat.parse("3/14/2001");
+    }
+    else{
+      d.dtg_end   = dtgFormat.parse(d.End_Date_Current); //substr? 
+    }
+    //d.dtg_end  = dtgFormat.parse(d.End_Date_Current);
+    d.lat   = +d.Latitude;
+    d.lon  = +d.Longitude;
+    d.Award_Amount   = +parseInt(d.Award_Amount.replace('$', '').replace(',', ''));
+    if (d.Award_Amount < 500){
+      d.amountstepped = "0-500";
+    }
+    else if (d.Award_Amount < 5000){
+      d.amountstepped = "501-5000";
+    }
+    else if (d.Award_Amount < 10000){
+      d.amountstepped = "5001-10000";
+    }
+    else if (d.Award_Amount < 50000){
+      d.amountstepped = "10000-50000";
+    }
+    else{
+      d.amountstepped = "> 50001";
+    }
+    //still have status, id, title, sector, tags, province
+  });
+
+/******************************************************
+* Step1: Create the dc.js chart objects & ling to div *
+******************************************************/
+
+  /***** Count Charts *****/
+  var dc_type_count_main = dc.pieChart("#dc-type_count_main");
+  var dc_status_count_main = dc.pieChart("#dc-status_count_main");
+  var dc_component_count_main = dc.pieChart("#dc-component_count_main");
+  var dc_type_award_main = dc.pieChart("#dc-type_award_main");
+  var dc_status_award_main = dc.pieChart("#dc-status_award_main");
+  var dc_component_award_main = dc.pieChart("#dc-component_award_main");
+
+  var dc_starttime_amount = dc.barChart("#dc-starttime-amount");
+  var dc_endtime_amount = dc.barChart("#dc-endtime-amount");
+
+  chartset = {"standard": [dc_type_count_main, dc_status_count_main, dc_component_count_main, dc_type_award_main, dc_status_award_main, dc_component_award_main]};
+  chartset['datetime'] = [dc_starttime_amount, dc_endtime_amount];
+
+
+  var dc_table_type = dc.dataTable("#dc-table-type");
+  var dc_table_status = dc.dataTable("#dc-table-status");
+  var dc_table_component = dc.dataTable("#dc-table-component");
+
+  //var dc_table_graph = dc.dataTable("#dc-table-graph");
+
+/****************************************
+*   Run the data through crossfilter    *
+****************************************/
+
+  facts = crossfilter(data);  // Gets our 'facts' into crossfilter
+
+/******************************************************
+* Create the Dimensions                               *
+* A dimension is something to group or filter by.     *
+* Crossfilter can filter by exact value, or by range. *
+******************************************************/
+//county by type
+
+  var typeValue = facts.dimension(function (d) {
+    return d.Atype;       // group or filter by magnitude
+  });
+  var typeCountGroup = typeValue.group().reduceCount(function(d){return d.Atype;});
+  var typeSumValue = facts.dimension(function (d) {
+    return d.Atype;       // group or filter by magnitude
+  });
+  var typeSumGroup = typeSumValue.group().reduceSum(function(d){return d.Award_Amount;});
+
+  var typeCountTableDimension = {
+    top: function (x) {
+      return typeCountGroup.top(x)
+              .map(function (grp) { return {"Sector":grp.key, "Sum":grp.value}; });
+      }
+  };
+
+
+  var statusValue = facts.dimension(function (d) {
+    return d.Status;       // group or filter by magnitude
+  });
+  var statusCountGroup = statusValue.group().reduceCount(function(d){return d.Status;});
+  var statusSumValue = facts.dimension(function (d) {
+    return d.Status;       // group or filter by magnitude
+  });
+  var statusSumGroup = statusSumValue.group().reduceSum(function(d){return d.Award_Amount;});
+
+  var statusCountTableDimension = {
+    top: function (x) {
+      return statusCountGroup.top(x)
+              .map(function (grp) { return {"Sector":grp.key, "Sum":grp.value}; });
+      }
+  };
+
+  var componentValue = facts.dimension(function (d) {
+    return d.Sub_Component;       // group or filter by magnitude
+  });
+  var componentCountGroup = componentValue.group().reduceCount(function(d){return d.Sub_Component;});
+  var componentSumValue = facts.dimension(function (d) {
+    return d.Sub_Component;       // group or filter by magnitude
+  });
+  var componentSumGroup = componentSumValue.group().reduceSum(function(d){return d.Award_Amount;});
+
+  var componentCountTableDimension = {
+    top: function (x) {
+      return componentCountGroup.top(x)
+              .map(function (grp) { return {"Sector":grp.key, "Sum":grp.value}; });
+      }
+  };
+  
+
+
+  // For datatable
+  var startTimeValue = facts.dimension(function (d) {
+    return d.dtg_start;
+  }); // group or filter by time
+
+  // For datatable
+  var endTimeValue = facts.dimension(function (d) {
+    return d.dtg_end;
+  }); // group or filter by time
+
+
+  districtValue = facts.dimension(function(d){
+    return d.Dist_Name;
+  });
+  districtCountGroup = districtValue.group().reduceCount(function(d){return d.Dist_Name;}).all();
+
+
+  /*
+  // for Depth
+  var depthValue = facts.dimension(function (d) {
+    return d.depth;
+  });
+  var depthValueGroup = depthValue.group();
+  */
+
+  // define a daily volume Dimension
+  var startValueDaily = facts.dimension(function(d) {
+    return d3.time.week(d.dtg_start);
+  });
+  // map/reduce to group sum
+  var startGroupByDay = startValueDaily.group()
+    .reduceCount(function(d) { return d.dtg_start; });
+
+  // define a daily volume Dimension
+  var endValueDaily = facts.dimension(function(d) {
+    return d3.time.week(d.dtg_end);
+  });
+  // map/reduce to group sum
+  var endGroupByDay = endValueDaily.group()
+    .reduceCount(function(d) { return d.dtg_end; });
+
+  var settypeValue = facts.dimension(function(d) {
+    return d.DataType;
+  });
+
+
+
+  var amountsubValue = facts.dimension(function (d) {
+    return d.amountsub;
+    });
+    var amountsubValueGroup = amountsubValue.group();
+
+    var locReduceInitial = function(){
+      return {thelist : {}, count : 0}
+    }
+
+    var locReduceAdd = function(p,v){
+      p.thelist[v['Activity_No']] = {
+        "title":v['Activity_Title'], 
+        "popupcontent": "<span class='popup_description'>" + v['Activity_Title'] + "<br>$" + formatMoney(v['Award_Amount']?v['Award_Amount']:0) + "<br>" + v['Atype'],
+        "datatype": v['DataType']
+      }
+      p.count += 1
+      return p
+    }
+    var locReduceRemove = function(p, v) {
+      p.count -= 1;
+      delete p.thelist[v['Activity_No']]
+      return p;
+    }
+
+
+
+   byLocation = facts.dimension(function(d) {
+                        return [d.lat,d.lon];
+                });
+
+  byLocationGroup = byLocation.group().reduce(locReduceAdd, locReduceRemove, locReduceInitial);
+  //byLocationGroup.top(Infinity)
+
+
+
+
+
+   
+
+/***************************************
+*   Step4: Create the Visualisations   *
+***************************************/
+  
+  // Magnitide Bar Graph Summed
+
+  dc_type_count_main.width(250)
+    .height(250)
+    .renderLabel(true)
+    .transitionDuration(1500)
+    .dimension(typeValue)
+    .group(typeCountGroup)
+    .radius(90)
+    //.minAngleForLabel(0)
+    .label(function(d) { return d.data.key; })
+
+  dc_status_count_main.width(250)
+    .height(250)
+    .renderLabel(true)
+    .transitionDuration(1500)
+    .dimension(statusValue)
+    .group(statusCountGroup)
+    .radius(90)
+    //.minAngleForLabel(0)
+    .label(function(d) { return d.data.key; })
+
+  dc_component_count_main.width(250)
+    .height(250)
+    .renderLabel(true)
+    .transitionDuration(1500)
+    .dimension(componentValue)
+    .group(componentCountGroup)
+    .radius(90)
+    //.minAngleForLabel(0)
+    .label(function(d) { return d.data.key; })
+
+
+
+  dc_type_award_main.width(250)
+    .height(250)
+    .renderLabel(true)
+    .transitionDuration(1500)
+    .dimension(typeSumValue)
+    .group(typeSumGroup)
+    .radius(90)
+    //.minAngleForLabel(0)
+    .label(function(d) { return d.data.key })
+    .title(function (d) {
+            return "$" + formatMoney(parseFloat(d.value), 0);
+        });
+
+
+  dc_status_award_main.width(250)
+    .height(250)
+    .renderLabel(true)
+    .transitionDuration(1500)
+    .dimension(statusSumValue)
+    .group(statusSumGroup)
+    .radius(90)
+    //.minAngleForLabel(0)
+    .label(function(d) { return d.data.key })
+    .title(function (d) {
+            return "$" + formatMoney(parseFloat(d.value), 0);
+        });
+
+  dc_component_award_main.width(250)
+    .height(250)
+    .renderLabel(true)
+    .transitionDuration(1500)
+    .dimension(componentSumValue)
+    .group(componentSumGroup)
+    .radius(90)
+    //.minAngleForLabel(0)
+    .label(function(d) { return d.data.key })
+    .title(function (d) {
+            return "$" + formatMoney(parseFloat(d.value), 0);
+        });
+
+
+  dc_starttime_amount.width(960)
+    .height(100)    
+    .margins({top: 10, right: 10, bottom: 20, left: 40})
+    .dimension(startValueDaily)
+    .group(startGroupByDay)
+    .gap(1)
+    .transitionDuration(500)
+    .elasticY(true)
+    //.xUnits(function(){return .1;})
+    .x(d3.time.scale().domain([new Date(2012, 1, 1), new Date(2013, 12, 30)])) // scale and domain of the graph
+    .xAxis();
+
+
+  dc_endtime_amount.width(960)
+    .height(100)    
+    .margins({top: 10, right: 10, bottom: 20, left: 40})
+    .dimension(endValueDaily)
+    .group(endGroupByDay)
+    .gap(1)
+    .transitionDuration(500)
+    .elasticY(true)
+    .x(d3.time.scale().domain([new Date(2012, 1, 1), new Date(2013, 12, 30)])) // scale and domain of the graph
+    //.xUnits(function(){return .1;})
+    .xAxis();
+
+
+
+    dc_table_type.width(960).height(800)
+    .dimension(typeCountTableDimension)
+  .group(function(d){return "Count of activities by type"})
+  .size(Infinity)             // number of rows to return
+    .columns([
+            function(d) { return d.Sector; },
+      function(d) { return d.Sum; }
+
+    ])
+    .sortBy(function(d){ return d.Sum; })
+    .order(d3.ascending);
+
+    dc_table_status.width(960).height(800)
+    .dimension(statusCountTableDimension)
+  .group(function(d){return "Count of activities by status"})
+  .size(Infinity)             // number of rows to return
+    .columns([
+            function(d) { return d.Sector; },
+      function(d) { return d.Sum; }
+
+    ])
+    .sortBy(function(d){ return d.Sum; })
+    .order(d3.ascending);
+
+    dc_table_component.width(960).height(800)
+    .dimension(componentCountTableDimension)
+  .group(function(d){return "Count of activities by component"})
+  .size(Infinity)             // number of rows to return
+    .columns([
+            function(d) { return d.Sector; },
+      function(d) { return d.Sum; }
+
+    ])
+    .sortBy(function(d){ return d.Sum; })
+    .order(d3.ascending);
+
+
+
+/*
+  dc_table_graph.width(960).height(800)
+    .dimension(statusValue)
+  .group(function(d){return "This is the title"})
+  .size(Infinity)             // number of rows to return
+    .columns([
+      function(d) { return d.Activity_Title; },
+      function(d) { return d.Status; },
+      function(d) { return d.Sub_Component; },
+      function(d) { return d.Award_Amount; },
+      function(d) { return d.Atype; },
+      function(d) { return d.DataType; }
+    ])
+    .sortBy(function(d){ return d.Activity_Title; })
+    .order(d3.ascending);
+    */
+
+
+/****************************
+* Step6: Render the Charts  *
+****************************/
+      
+  dc.renderAll();
+
+      var setMarkerColor = function(datatype){
+          return datatype == 'Activities' ? '#0000CC':
+               datatype == 'Grants'  ? '#9900FF' :
+                            '#A8A8A8' ;
+      }
+
+
+
+      var updateMarkers = function(){
+
+        //markerLayer.features([]);
+
+        var allSets = byLocationGroup.all();
+        var geoMarkers = []
+
+        for (var i =0;i<allSets.length;i++){
+          if (allSets[i].value['count'] > 0 && allSets[i].key[0] && allSets[i].key[1] ){
+              for (var thekey in allSets[i].value['thelist']){
+              
+
+                geoMarkers.push({
+                    type: 'Feature',
+                    geometry: {
+                        type: 'Point',
+                        coordinates: [allSets[i].key[1], allSets[i].key[0]]
+                    },
+                    properties: {
+                          'marker-color': setMarkerColor(allSets[i].value['thelist'][thekey]['datatype']) ,
+                          'marker-size' : 'small',
+                          'marker-symbol': 'star-stroked',
+                          title: allSets[i].value['thelist'][thekey]['title'] ,
+                          popupcontent: allSets[i].value['thelist'][thekey]['popupcontent']
+                    }
+                });
+              }
+
+
+
+            }
+
+        }
+        //markerLayer.setGeoJSON(geoMarkers);
+
+        markers.fromGeoJSON({"features":geoMarkers});
+
+        //now need to set up the UI
+        $(".current-filters").html("");
+        var newhtml = "";
+
+        for (var i=0; i<chartset['standard'].length;i++){
+          if (chartset['standard'][i].filter()){
+            newhtml += "<span id='filteritem-standard-" + i + "' class='filteritem'><div class='closebox'>X</div>" + chartset['standard'][i].filter() + "</span>";
+          }
+        }
+        for (var i=0; i<chartset['datetime'].length;i++){
+          if (chartset['datetime'][i].filter()){
+            newhtml += "<span id='filteritem-datetime-" + i + "' class='filteritem'><div class='closebox'>X</div>" + chartset['datetime'][i].filter() + "</span>";
+          }
+        }
+        $(".current-filters").html(newhtml);
+        $(".closebox").click(function(){
+          var filterindex = $(this).parent().attr("id").split("-");
+          chartset[filterindex[1]][parseInt(filterindex[2])].filter(null);
+          updateMarkers();
+          dc.redrawAll();
+        });
+
+
+
+      }
+
+
+
+
+//.on("filtered", function(chart, filter){...})
+
+  d3.select("body").selectAll(".filteredelement")
+    .on("click", function(e){geojson.setStyle(styleFunc);updateMarkers();});
+
+
+
+
+/****************************
+* And now it's time for teh map  *
+****************************/
+    L.MarkerClusterGroup.include({
+        fromGeoJSON: function (geojson) {
+            this._geojson = geojson;
+            this.filter();
+        },
+        filter: function (f) {
+
+            f = f || function (m) { return true; }
+            var markerset = Array();
+            for (var i = 0; i < this._geojson.features.length; i++) {
+                var a = this._geojson.features[i];
+                var marker = L.marker(new L.LatLng(a.geometry.coordinates[1], a.geometry.coordinates[0]), {
+                    icon: L.mapbox.marker.icon({                
+                      "marker-symbol": a.properties['marker-symbol'],
+                    "marker-size": a.properties['marker-size'],
+                    "marker-color": a.properties['marker-color']}),
+                    title: a.properties['title']
+                });
+                marker.bindPopup(a.properties['popupcontent']);
+                markerset.push(marker);
+            }
+            this.clearLayers();
+            this.addLayers(markerset);
+        }
+      });
+
+
+
+
+
+  map = L.mapbox.map('map', 'dai.gfkg359c')
+     .setView([36.255, 69.258], 8);
+
+    //markerLayer = L.mapbox.markerLayer().addTo(map);
+
+    markers = L.markerClusterGroup({ spiderfyOnMaxZoom: false, showCoverageOnHover: false, zoomToBoundsOnClick: false });
+    map.addLayer(markers);
+
+    
+
+    markers.on('clusterclick', function (a) {
+      a.layer.spiderfy();
+    });
+
+
+    var getColor = function(d) {
+        return d ==  "Vulnerable" ? 'red' :
+               d == "UnStable"  ? 'yellow' :
+               d == "Stable"  ? 'Green' :
+                            'grey' ;
+
+
+/*
+        return d > 30 ? '#800026' :
+               d > 20  ? '#BD0026' :
+               d > 10  ? '#E31A1C' :
+               d > 5  ? '#FC4E2A' :
+               d > 3   ? '#FD8D3C' :
+                            '#FEB24C' ;
+               //d > 0   ? '#FEB24C' ;
+              // d > 10   ? '#FED976' :
+              //            '#FFEDA0';
+*/
+    }
+
+
+
+    var styleFunc = function(feature) {
+/*
+      var value;
+        for (var i=0;i<districtCountGroup.length;i++){
+          if (districtCountGroup[i]['key'] == feature.properties['NAME_2']){
+            value = districtCountGroup[i]['value'];
+            break;
+          }
+        }
+        if (! value){
+          value = 0;
+        }
+
+        var color = 'grey';
+        var weight = 1;
+
+        if (feature == currentlayer){
+          color = 'white';
+          weight = 3;
+        }
+*/
+    var value= feature.properties.Situation;
+    var color = 'grey';
+
+        return {
+            //fillColor: getColor(feature.properties.density),
+            fillColor: getColor(value),
+            weight: 1,
+            opacity: .7,
+            color: color,
+            dashArray: '1',
+            fillOpacity: 0.7
+        };
+    }
+
+
+
+    $.getJSON("security_zones.json", function (json2) {
+      geojson = L.geoJson(json2, {
+          style: styleFunc, 
+          onEachFeature: function(feature, layer){
+
+            layer.on({'click': function(e){
+              if (feature == currentlayer){
+                //districtValue.filter(null);
+                //currentlayer = null;
+                //geojson.setStyle(styleFunc);
+                //updateMarkers();
+                
+              }
+              else{
+                //districtValue.filter(feature.properties['NAME_2']);
+                //currentlayer = feature;
+                //geojson.setStyle(styleFunc);
+                //updateMarkers();
+                
+              }
+
+              if (!L.Browser.ie && !L.Browser.opera) {
+                  geojson.bringToFront();
+              }
+              //dc.redrawAll();
+            }});
+            
+             
+          }
+      }).addTo(map);
+
+      // Add custom popups to each using our custom feature properties
+
+
+  
+/*
+      markerLayer.on('layeradd', function(e) {
+          var marker = e.layer,
+              feature = marker.feature;
+
+          // http://leafletjs.com/reference.html#popup
+          marker.bindPopup(feature.properties.popupcontent,{
+              closeButton: true,
+              minWidth: 320
+          });
+      });
+*/
+
+
+
+
+      updateMarkers();
+
+
+      /*********************************************/
+      /**********UI CONTROL             *************/
+
+      /*********************************************/
+
+      $("#resetallfilters").click(function(){
+        dc.filterAll();
+        updateMarkers();
+        dc.redrawAll();
+      });
+
+      $("#map_dots").click(function(){
+        if ($(this).hasClass("active")){
+          $(this).removeClass("active");
+          map.removeLayer(markers);
+        }
+        else {
+          $(this).addClass("active");
+          map.addLayer(markers);
+        }
+      });
+
+      $("#map_districts").click(function(){
+        if ($(this).hasClass("active")){
+          $(this).removeClass("active");
+          map.removeLayer(geojson);
+          //geojson.setFilter(function() { return false; })
+        }
+        else {
+          $(this).addClass("active");
+          map.addLayer(geojson);
+          //geojson.setFilter(function() { return true; })
+        }
+      });
+
+      $(".filterbutton").click(function(){
+        if ($(this).hasClass("active")){
+          $(this).removeClass("active");
+        }
+        else {
+          $(this).addClass("active");
+        }
+
+        if ($("#grants_toggle").hasClass("active") && $("#activities_toggle").hasClass("active")){
+          settypeValue.filter(null);
+        }
+        else if ($("#grants_toggle").hasClass("active") ){
+          settypeValue.filter("Grants");
+        }
+        else if ($("#activities_toggle").hasClass("active")){
+          settypeValue.filter("Activities");
+        }
+        else {
+          settypeValue.filter("Nothing");
+        }
+        //geojson.setStyle(styleFunc);
+        updateMarkers();
+        dc.redrawAll();
+      });
+    });
+
+
+    //remove the loader here
+
+  
+});
+    var formatMoney = function(v, c, d, t){
+      var n = v, 
+          c = isNaN(c = Math.abs(c)) ? 2 : c, 
+          d = d == undefined ? "." : d, 
+          t = t == undefined ? "," : t, 
+          s = n < 0 ? "-" : "", 
+          i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", 
+          j = (j = i.length) > 3 ? j % 3 : 0;
+         return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+     };
+
+    $( "#accordion" ).accordion({ heightStyle: "content", collapsible: true, active:false });
+
+
+  
+</script>
+
+
+  <!--[if lte IE 8]><script type='text/javascript'>document.getElementById("unsupported").style.display = "block";</script><![endif]-->
+    
+</body>
+</html>
