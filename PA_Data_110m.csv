@@ -1,0 +1,51 @@
+FID,sovereignt,Country,PEPFAR,Signed,Deposited,SignedDeposited,Maternity_Health_Access_to_Care,Human_Trafficking,ICAO,UNESCO,FAO,OAS,UNGA,OSCE,OECD,NATO,EU,AU,UNHCR,MLO_Index,APEC,NAFTA,WTO,ASEAN,CBERA,CAFTA,TP_Index
+PA_Data_110m.1,Afghanistan,Afghanistan,,X,X,2,Poor,Tier 2 Watch List,Member,Member,Member,,Member,,,,,,,4,,,Observer,,,,1
+PA_Data_110m.2,Angola,Angola,1,,X,1,Poor,Tier 2 Watch List,Member,Member,Member,,Member,,,,,Member,,5,Member,,Member,,,,2
+PA_Data_110m.3,Albania,Albania,,,X,1,Poor,Tier 2 Watch List,Member,Member,Member,,Member,Member,,Member,,,,6,,,Member,,,,1
+PA_Data_110m.4,United Arab Emirates,United Arab Emirates,,,X,1,Good,Tier 2,Member,Member,Member,,Member,,,,,,,4,,,Member,,,,1
+PA_Data_110m.5,Argentina,Argentina,,,X,1,Fair,Tier 2,Member,Member,Member,Member,Member,,,,,,Member,6,,,Member,,,,1
+PA_Data_110m.6,Armenia,Armenia,,,X,1,Poor,Tier 1,Member,Member,Member,,Member,Member,,,,,,5,,,Member,,,,1
+PA_Data_110m.7,Antarctica,,,,,,,,,,,,,,,,,,,,,,,,,,
+PA_Data_110m.8,France,France,,,X,1,Excellent,Tier 1,Member,Member,Member,,Member,Member,Member,Member,Member,,Member,9,,,Member,,,,1
+PA_Data_110m.16,Bangladesh,Bangladesh,,,X,1,Poor,Tier 2,Member,Member,Member,,Member,,,,,,Member,5,,,Member,,,,1
+PA_Data_110m.9,Australia,Australia,,X,X,2,Excellent,Tier 1,Member,Member,Member,,Member,,Member,,,,Member,6,,,Member,,,,1
+PA_Data_110m.10,Austria,Austria,,X,X,2,Excellent,Tier 1,Member,Member,Member,,Member,Member,Member,,Member,,,7,,,Member,,,,1
+PA_Data_110m.11,Azerbaijan,Azerbaijan,,,X,1,Poor,Tier 2,Member,Member,Member,,Member,Member,,,,,Member,6,,,Observer,,,,1
+PA_Data_110m.12,Burundi,Burundi,1,,X,1,Poor,Tier 2 Watch List,Member,Member,Member,,Member,,,,,Member,,5,Member,,Member,,,,2
+PA_Data_110m.13,Belgium,Belgium,,X,X,2,Excellent,Tier 1,Member,Member,Member,,Member,Member,Member,Member,Member,,Member,9,,,Member,,,,1
+PA_Data_110m.14,Benin,Benin,,X,X,2,Unsuitable,Tier 2,Member,Member,Member,,Member,,,,,Member,Member,6,Member,,Member,,,,2
+PA_Data_110m.15,Burkina Faso,Burkina Faso,,X,X,2,Unsuitable,Tier 2,Member,Member,Member,,Member,,,,,Member,,5,Member,,Member,,,,2
+PA_Data_110m.17,Bulgaria,Bulgaria,,X,X,2,Fair,Tier 2,Member,Member,Member,,Member,Member,,Member,Member,,Member,8,,,Member,,,,1
+PA_Data_110m.18,The Bahamas,The Bahamas,2,,X,1,Good,Tier 2,Member,Member,Member,Member,Member,,,,,,,5,,,Observer,,Member,,2
+PA_Data_110m.19,Bosnia and Herzegovina,Bosnia and Herzegovina,,,X,1,Fair,Tier 2,Member,Member,Member,,Member,Member,,,,,,5,,,Observer,,,,1
+PA_Data_110m.20,Belarus,Belarus,,,X,1,Poor,Tier 2 Watch List,Member,Member,Member,,Member,Member,,,,,,5,,,Observer,,,,1
+PA_Data_110m.21,Belize,Belize,2,,X,1,Poor,Tier 2,Member,Member,Member,Member,Member,,,,,,,5,,,Member,,Member,,2
+PA_Data_110m.22,Bolivia,Bolivia,,X,X,2,Poor,Tier 2,Member,Member,Member,Member,Member,,,,,,,5,,,Member,,,,1
+PA_Data_110m.23,Central African Republic,Central African Republic,,,,0,Unsuitable,Tier 3,Member,Member,Member,,Member,,,,,Suspended,,4.5,Member,,Member,,,,2
+PA_Data_110m.24,Canada,Canada,,X,X,2,Excellent,Tier 2,Member,Member,Member,Member,Member,Member,Member,Member,,,Member,9,,Member,Member,,,,2
+PA_Data_110m.35,Democratic Republic of the Congo,Democratic Republic of the Congo,1,X,X,2,Unsuitable,Tier 3,Member,Member,Member,,Member,,,,,Member,Member,6,Member,,Member,,,,2
+PA_Data_110m.25,Brazil,Brazil,3,,X,1,Poor,Tier 2,Member,Member,Member,,Member,,,,,,Member,5,,,Member,,,,1
+PA_Data_110m.26,Brunei,Brunei,,,X,1,Good,Tier 2,Member,Member,Member,,Member,,,,,,,4,,,Member,Member,,,2
+PA_Data_110m.27,Bhutan,Bhutan,,,X,1,Poor,Tier 2,Member,Member,Member,,Member,,,,,,,4,,,Observer,,,,1
+PA_Data_110m.28,Botswana,Botswana,1,X,X,2,Fair,Tier 2,Member,Member,Member,,Member,,,,,Member,,5,Member,,Member,,,,2
+PA_Data_110m.29,Switzerland,Switzerland,,X,X,2,Excellent,Tier 2,Member,Member,Member,,Member,Member,Member,,,,Member,7,,,Member,,,,1
+PA_Data_110m.30,Chile,Chile,,,X,1,Good,Tier 2,Member,Member,Member,Member,Member,,Member,,,,Member,7,,,Member,,,,1
+PA_Data_110m.31,China,China,2,,X,1,Poor,Tier 3 Auto-Downgrade,Member,Member,Member,,Member,,,,,,Member,5,,,Member,,,,1
+PA_Data_110m.32,Djibouti,Djibouti,3,,X,1,Poor,Tier 2 Watch List,Member,Member,Member,,Member,,,,,Member,Member,6,Member,,Member,,,,2
+PA_Data_110m.33,Ivory Coast,,,,,,,,,,,,,,,,,,,,,,,,,,
+PA_Data_110m.34,Cameroon,Cameroon,1,X,X,2,Poor,Tier 1,Member,Member,Member,,Member,,,,,Member,Member,6,Member,,Member,,,,2
+PA_Data_110m.36,Republic of Congo,Republic of Congo,,X,X,2,,Tier 2,Member,,Member,,Member,,,,,Member,Member,5,Member,,Member,,,,2
+PA_Data_110m.37,Denmark,Denmark,,X,X,2,Excellent,Tier 1,Member,Member,Member,,Member,Member,Member,Member,Member,,Member,9,,,Member,,,,1
+PA_Data_110m.38,Colombia,Colombia,,X,X,2,Poor,Tier 1,Member,Member,Member,Member,Member,,,,,,Member,6,,,Member,,,,1
+PA_Data_110m.39,Costa Rica,Costa Rica,2,X,X,2,Excellent,Tier 2,Member,Member,Member,Member,Member,,,,,,Member,6,,,Member,,,Member,2
+PA_Data_110m.40,Cuba,Cuba,,,X,1,Good,Tier 3,Member,Member,Member,,Member,,,,,,,4,,,Member,,,,1
+PA_Data_110m.41,Czech Republic,Czech Republic,,,X,1,Good,Tier 1,Member,Member,Member,,Member,Member,Member,Member,Member,,,8,,,Member,,,,1
+PA_Data_110m.42,Germany,Germany,,X,X,2,Excellent,Tier 1,Member,Member,Member,,Member,Member,Member,Member,Member,,Member,9,,,Member,,,,1
+PA_Data_110m.43,Dominican Republic,Dominican Republic,1,X,X,2,Fair,Tier 2,Member,Member,Member,Member,Member,,,,,,,5,,,Member,,,Member,2
+PA_Data_110m.44,Algeria,Algeria,,,X,1,Poor,Tier 3,Member,Member,Member,,Member,,,,,Member,Member,6,,,Observer,,,,1
+PA_Data_110m.45,Ecuador,Ecuador,,X,X,2,Poor,Tier 2,Member,Member,Member,Member,Member,,,,,,Member,6,,,Member,,,,1
+PA_Data_110m.46,Eritrea,Eritrea,,,X,1,Poor,Tier 3,Member,Member,Member,,Member,,,,,Member,,5,Member,,,,,,1
+PA_Data_110m.47,Spain,Spain,,,X,1,Excellent,Tier 1,Member,Member,Member,,Member,,Member,Member,Member,,Member,8,,,Member,,,,1
+PA_Data_110m.48,Estonia,Estonia,,,X,1,Good,Tier 2,Member,Member,Member,,Member,Member,Member,Member,Member,,Member,9,,,Member,,,,1
+PA_Data_110m.49,Liberia,Liberia,3,X,X,2,Unsuitable,Tier 2 Watch List,Member,Member,Member,,Member,,,,,Member,,5,Member,,Observer,,,,2
+PA_Data_110m.50,Ethiopia,Ethiopia,1,X,X,2,Unsuitable,Tier 2,Member,Member,Member,,Member,,,,,Member,Member,6,Member,,Observer,,,,2

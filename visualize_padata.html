@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='utf-8'>
+  <meta content='width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0' name='viewport'>
+
+  <title>SIKA-North Grants and Activities Visualization</title>
+
+  <link href='//api.tiles.mapbox.com/mapbox.js/v1.5.1/mapbox.css' rel='stylesheet' />
+
+  <script src='d3.min.js' type='text/javascript'></script>
+  <script src='crossfilter.js' type='text/javascript'></script>
+  <script src='dc.min.js' type='text/javascript'></script>
+  <script src='jquery-1.9.1.min.js' type='text/javascript'></script>
+  <script src='bootstrap.min.js' type='text/javascript'></script>
+
+    <script src='//api.tiles.mapbox.com/mapbox.js/v1.5.1/mapbox.js'></script>
+
+
+  <link href='bootstrap.min.css' rel='stylesheet' type='text/css'>
+  <link href='dc.css' rel='stylesheet' type='text/css'>
+
+  <style type="text/css">
+  #map{
+    height:800px;
+    width:100%;
+  }
+  .button{
+    font-size: 23px;
+    white-space: nowrap;
+    text-align: center;
+    width: 180px;
+    margin: 0 0 25px 0px;
+    line-height: 20px;
+    display: inline-block;
+    text-decoration: none;
+    padding: 12px 10px;
+    text-transform: uppercase;
+    cursor: pointer;
+    background: #B7BEC2;
+    color: #fff;
+    position: relative;
+    border-radius: 2px;
+    text-shadow: 0 1px 1px rgba(0,0,0,0.2);
+  }
+  .active{
+    background-color: #60b7e1;
+  }
+  .button:hover{
+    background-color: #3da1d1;
+  }
+  .span6{
+    width:280px;
+  }
+ .piechart-wrapper h4{
+   text-align:center;
+}
+.piechart-wrapper{
+  width:250px;
+  display:inline-block;
+}
+
+  </style>
+</head>
+
+<body>
+
+<div class='container' id='main-container'>
+<div class='content'>
+<div class='container' style='font: 12px sans-serif;'>
+  <h1>SIKA-North Grants and Activities</h1>
+  <div class='row'>
+    <div class='span12' id='mapplace'>
+      <div id="map"></div>
+    </div>
+  </div>
+  <br/>
+  <br/>
+
+    <div class='row'>
+      <div class='span12'>
+        <h3>Count</h3>
+        <div class='row'>
+         <div class='piechart-wrapper'>
+          <h4>PEPFAR</h4>
+          <div class='pie-graph span6 inlinechart' id='dc_pepfar_count_main'></div>
+          </div>
+<div class='piechart-wrapper'>
+          <h4>Deposited</h4>
+          <div class='pie-graph span6 inlinechart' id='dc_deposited_count_main'> </div>
+          </div>
+<div class='piechart-wrapper'>
+          <h4>Signed</h4>
+          <div class='pie-graph span6  inlinechart' id='dc_signed_count_main'> </div>
+    </div>
+<div class='piechart-wrapper'>
+          <h4>Signed and deposited</h4>
+          <div class='pie-graph span6  inlinechart' id='dc_signeddeposited_count_main'> </div>
+    </div>
+<div class='piechart-wrapper'>
+          <h4>Maternity Child Health</h4>
+          <div class='pie-graph span6  inlinechart' id='dc_maternity_count_main'> </div>
+    </div>
+        </div>
+      </div>
+    </div>
+
+
+
+<!--
+
+  <div class='row'>
+    <h4>Count Start Date</h4>
+    <div class='span12' id='dc-starttime-amount'>
+      
+    </div>
+    <h4>Count End Date</h4>
+    <div class='span12' id='dc-endtime-amount'>
+      
+    </div>
+  </div>
+-->
+
+  <div class='row'>
+  <div class='pie-graph span12'>
+      <table class='table table-hover' id='dc-table-graph'>
+        <thead>
+          <tr class='header'>
+            <th>Country</th>
+            <th>Signed</th>
+            <th>PEPFAR</th>
+            <th>Deposited</th>
+            <th>Signed Deposited</th>
+            <th>Maternity</th>
+          </tr>
+        </thead>
+      </table>
+  </div>
+  </div>
+
+
+</div>
+</div>
+</div>
+  
+<script>
+
+  
+/**********************************
+* Step0: Load data from json file *
+**********************************/
+var facts;
+var byLocation;
+var byLocationGroup;
+var districtValue;
+var districtCountGroup;
+var geojson;
+var markerLayer;
+var countryLayers = [];
+var countryValue;
+
+// load data from a csv file
+
+
+//$.getJSON('opengrants',null,function(data){
+//$.ajax({
+//  url: "opengrants",
+//}).done(function(msg) {
+
+ //   var data = $.parseJSON( msg)
+
+
+//d3.json("opengrants?OpenAgent", function(error, data) {
+d3.csv("PA_Data_110m.csv", function (data) {
+
+  // format our data
+  var dtgFormat = d3.time.format("%m/%d/%Y");
+  
+  data.forEach(function(d) { 
+    //FID Country, PEPFAR, Signed, Deposited, SignedDeposited, Maternity_Health_Access_to_Care
+    switch(d.Maternity_Health_Access_to_Care) {
+      case "Good":
+          d.Maternity_Health_Access_to_Care = "Good";
+          break;
+      case "Fair":
+          d.Maternity_Health_Access_to_Care = "Fair";
+          break;
+      case "Poor":
+          d.Maternity_Health_Access_to_Care = "Poor";
+          break;
+      default:
+          d.Maternity_Health_Access_to_Care = "NA";
+    }
+
+    switch(d.PEPFAR) {
+      case 3:
+          d.PEPFAR = "Good";
+          break;
+      case 2:
+          d.PEPFAR = "Fair";
+          break;
+      case 1:
+          d.PEPFAR = "Poor";
+          break;
+      default:
+          d.PEPFAR = "NA";
+    }
+
+
+    if (d.Signed == "X"){
+      d.Signed = "Signed";
+    }
+    else {
+      d.Signed = "Not Signed";
+    }
+
+    if (d.Deposited == "X"){
+      d.Deposited = "Deposited";
+    }
+    else {
+      d.Deposited = "Not Deposited";
+    }
+
+    switch(d.SignedDeposited) {
+      case 2:
+          d.SignedDeposited = "SignedDeposited";
+          break;
+      case 1:
+          d.SignedDeposited = "Just One";
+          break;
+      default:
+          d.SignedDeposited = "None";
+    }
+
+
+
+  });
+
+/******************************************************
+* Step1: Create the dc.js chart objects & ling to div *
+******************************************************/
+
+  /***** Count Charts *****/
+  var dc_pepfar_count = dc.pieChart("#dc_pepfar_count_main");
+  var dc_deposited_count = dc.pieChart("#dc_deposited_count_main");
+  var dc_signed_count = dc.pieChart("#dc_signed_count_main");
+  var dc_signeddeposited_count = dc.pieChart("#dc_signeddeposited_count_main");
+  var dc_maternity_count = dc.pieChart("#dc_maternity_count_main");
+
+
+
+  var dc_table_graph = dc.dataTable("#dc-table-graph");
+
+/****************************************
+*   Run the data through crossfilter    *
+****************************************/
+
+  facts = crossfilter(data);  // Gets our 'facts' into crossfilter
+
+/******************************************************
+* Create the Dimensions                               *
+* A dimension is something to group or filter by.     *
+* Crossfilter can filter by exact value, or by range. *
+******************************************************/
+//county by typeall()
+
+  var pepfarValue = facts.dimension(function(d){return d.PEPFAR});
+  var pepfarGroupCount = pepfarValue.group().reduceCount(function(d){return d.PEPFAR;});
+
+  var signedValue = facts.dimension(function(d){return d.Signed;});
+  var signedGroupCount = signedValue.group().reduceCount(function(d){return d.Signed;});
+
+  var depositedValue = facts.dimension(function(d){return d.Deposited;});
+  var depositedGroupCount = depositedValue.group().reduceCount(function(d){return d.Deposited;});
+
+  var signeddepositedValue = facts.dimension(function(d){return d.SignedDeposited;});
+  var signeddepositedGroupCount = signeddepositedValue.group().reduceCount(function(d){return d.SignedDeposited;});
+
+  var maternityValue = facts.dimension(function(d){return d.Maternity_Health_Access_to_Care;});
+  var maternityGroupCount = maternityValue.group().reduceCount(function(d){return d.Maternity_Health_Access_to_Care;});
+
+
+
+
+  //var typeSumGroup = typeValue.group().reduceSum(function(d){return d.Award_Amount;});
+
+  
+
+/*
+  // For datatable
+  var startTimeValue = facts.dimension(function (d) {
+    return d.dtg_start;
+  }); // group or filter by time
+
+  // For datatable
+  var endTimeValue = facts.dimension(function (d) {
+    return d.dtg_end;
+  }); // group or filter by time
+*/
+
+
+  countryValue = facts.dimension(function(d){
+    return d.Country;
+  });
+  countryCountGroup = countryValue.group().reduceCount(function(d){return d.Country;});
+
+
+  /*
+  // for Depth
+  var depthValue = facts.dimension(function (d) {
+    return d.depth;
+  });
+  var depthValueGroup = depthValue.group();
+  */
+
+
+
+/*
+  var amountsubValue = facts.dimension(function (d) {
+    return d.amountsub;
+    });
+    var amountsubValueGroup = amountsubValue.group();
+
+    var locReduceInitial = function(){
+      return {thelist : {}, count : 0}
+    }
+
+    var locReduceAdd = function(p,v){
+      p.thelist[v['Activity_No']] = v['Activity_Title'];
+      p.count += 1
+      return p
+    }
+    var locReduceRemove = function(p, v) {
+      p.count -= 1;
+      delete p.thelist[v['Activity_No']]
+      return p;
+    }
+
+
+
+   byLocation = facts.dimension(function(d) {
+                        return [d.lat,d.lon];
+                });
+
+  byLocationGroup = byLocation.group().reduce(locReduceAdd, locReduceRemove, locReduceInitial);
+  */
+  //byLocationGroup.top(Infinity)
+
+   
+
+/***************************************
+*   Step4: Create the Visualisations   *
+***************************************/
+
+  // Magnitide Bar Graph Summed
+
+  dc_pepfar_count.width(250)
+    .height(250)
+    .renderLabel(true)
+    .transitionDuration(1500)
+    .dimension(pepfarValue)
+    .group(pepfarGroupCount)
+    .radius(90)
+    //.minAngleForLabel(0)
+    .label(function(d) { return d.data.key; })
+
+  dc_deposited_count.width(250)
+    .height(250)
+    .renderLabel(true)
+    .transitionDuration(1500)
+    .dimension(depositedValue)
+    .group(depositedGroupCount)
+    .radius(90)
+    //.minAngleForLabel(0)
+    .label(function(d) { return d.data.key; })
+
+  dc_signed_count.width(250)
+    .height(250)
+    .renderLabel(true)
+    .transitionDuration(1500)
+    .dimension(signedValue)
+    .group(signedGroupCount)
+    .radius(90)
+    //.minAngleForLabel(0)
+    .label(function(d) { return d.data.key; })
+
+
+
+  dc_signeddeposited_count.width(250)
+    .height(250)
+    .renderLabel(true)
+    .transitionDuration(1500)
+    .dimension(signeddepositedValue)
+    .group(signeddepositedGroupCount)
+    .radius(90)
+    //.minAngleForLabel(0)
+    .label(function(d) { return d.data.key })
+
+  dc_maternity_count.width(250)
+    .height(250)
+    .renderLabel(true)
+    .transitionDuration(1500)
+    .dimension(maternityValue)
+    .group(maternityGroupCount)
+    .radius(90)
+    //.minAngleForLabel(0)
+    .label(function(d) { return d.data.key })
+/*
+
+  dc_starttime_amount.width(960)
+    .height(100)    
+    .margins({top: 10, right: 10, bottom: 20, left: 40})
+    .dimension(startValueDaily)
+    .group(startGroupByDay)
+    .transitionDuration(500)
+  .elasticY(true)
+    .x(d3.time.scale().domain([new Date(2012, 1, 1), new Date(2013, 12, 30)])) // scale and domain of the graph
+    .xAxis();
+
+
+  dc_endtime_amount.width(960)
+    .height(100)    
+    .margins({top: 10, right: 10, bottom: 20, left: 40})
+    .dimension(endValueDaily)
+    .group(endGroupByDay)
+    .transitionDuration(500)
+  .elasticY(true)
+    .x(d3.time.scale().domain([new Date(2012, 1, 1), new Date(2013, 12, 30)])) // scale and domain of the graph
+    .xAxis();
+
+*/
+
+
+  dc_table_graph.width(960).height(800)
+    .dimension(pepfarValue)
+  .group(function(d){return "Data List"})
+  .size(Infinity)             // number of rows to return
+    .columns([
+      function(d) { return d.Country; },
+      function(d) { return d.Signed; },
+      function(d) { return d.PEPFAR; },
+      function(d) { return d.Deposited; },
+      function(d) { return d.SignedDeposited; },
+      function(d) { return d.Maternity_Health_Access_to_Care; }
+    ])
+    .sortBy(function(d){ return d.Country; })
+    .order(d3.ascending);
+
+
+/****************************
+* Step6: Render the Charts  *
+****************************/
+      
+  dc.renderAll();
+
+/*
+
+      var updateMarkers = function(){
+
+        //markerLayer.features([]);
+
+        var allSets = byLocationGroup.all();
+        var geoMarkers = []
+
+        for (var i =0;i<allSets.length;i++){
+          if (allSets[i].value['count'] > 0 && allSets[i].key[0] && allSets[i].key[1] ){
+              var popupcontent = "";
+              var counter = 1;
+              for (var thekey in allSets[i].value['thelist']){
+                popupcontent += counter + ". " + allSets[i].value['thelist'][thekey] + "<br/>";
+                counter += 1;
+              }
+
+              geoMarkers.push({
+                  type: 'Feature',
+                  geometry: {
+                      type: 'Point',
+                      coordinates: [allSets[i].key[1], allSets[i].key[0]]
+                  },
+                  properties: {
+                        'marker-color': '#000',
+                        'marker-size' : 'small',
+                        'marker-symbol': 'star-stroked',
+                        title: allSets[i].value['count'],
+                        popupcontent: popupcontent
+                  }
+              });
+
+
+
+            }
+
+        }
+        markerLayer.setGeoJSON(geoMarkers);
+
+
+      }
+      */
+
+
+
+
+/*
+  d3.select("body").selectAll(".dc-chart")
+    .on("mouseup", function(e){geojson.setStyle(styleFunc);updateMarkers();});
+*/
+
+
+
+/****************************
+* And now it's time for teh map  *
+****************************/
+
+
+
+
+
+  map = L.mapbox.map('map', 'dai.ghijecig')
+     .setView([36.255, 69.258], 8);
+
+    markerLayer = L.mapbox.markerLayer().addTo(map);
+
+    var getColor = function(d) {
+        return d > 30 ? '#800026' :
+               d > 20  ? '#BD0026' :
+               d > 10  ? '#E31A1C' :
+               d > 5  ? '#FC4E2A' :
+               d > 3   ? '#FD8D3C' :
+                            '#FEB24C' ;
+               //d > 0   ? '#FEB24C' ;
+              // d > 10   ? '#FED976' :
+              //            '#FFEDA0';
+    }
+
+
+
+    var styleFunc = function(feature) {
+      /*
+      var value;
+        for (var i=0;i<countryCountGroup.length;i++){
+          if (countryCountGroup[i]['key'] == feature.properties['Country']){
+            value = countryCountGroup[i]['value'];
+            break;
+          }
+        }
+        if (! value){
+          value = 0;
+        }
+        */
+
+        var color = 'grey';
+        var weight = 1;
+
+        if ($.inArray(feature.properties['Country'], countryLayers)){
+          color = 'white';
+          weight = 3;
+        }
+
+        return {
+            //fillColor: getColor(feature.properties.density),
+            //fillColor: getColor(value),
+            fillColor: '#800026',
+            weight: weight,
+            opacity: 1,
+            color: color,
+            dashArray: '1',
+            fillOpacity: 0.7
+        };
+    }
+
+
+
+    $.getJSON("countrygeojson.json", function (json2) {
+      geojson = L.geoJson(json2, {
+          style: styleFunc, 
+          onEachFeature: function(feature, layer){
+
+            //console.log(provincedimension.filter());
+            layer.on({'click': function(e){
+              //check if feature county is in array
+              var countrybool = $.inArray( feature.properties['Country'], countryLayers );
+              console.log(countryLayers);
+
+              //if it is then remove it
+              //technically this shold work but need something better 
+              if (countrybool == true){
+                countryLayers.splice( $.inArray(feature.properties['Country'], countryLayers), 1 );
+              }
+              else{
+                countryLayers.push(feature.properties['Country']); 
+              }
+              countryValue.filter(countryLayers);
+              //geojson.setStyle(styleFunc);
+              dc.redrawAll();
+              
+              }});
+            
+              
+              //layer.bindPopup("Hello GeoJSON!");
+          }
+      }).addTo(map);
+
+      // Add custom popups to each using our custom feature properties
+
+
+      /*********************************************/
+      /**********UI CONTROL             *************/
+
+      /*********************************************/
+/*
+      $("#map_dots").click(function(){
+        if ($(this).hasClass("active")){
+          $(this).removeClass("active");
+          markerLayer.setFilter(function() { return false; })
+        }
+        else {
+          $(this).addClass("active");
+          markerLayer.setFilter(function() { return true; })
+        }
+      });
+*/
+/*
+
+      $("#map_districts").click(function(){
+        if ($(this).hasClass("active")){
+          $(this).removeClass("active");
+          map.removeLayer(geojson);
+          //geojson.setFilter(function() { return false; })
+        }
+        else {
+          $(this).addClass("active");
+          map.addLayer(geojson);
+          //geojson.setFilter(function() { return true; })
+        }
+      });
+*/
+/*
+      $(".filterbutton").click(function(){
+ 
+        if ($(this).hasClass("active")){
+          $(this).removeClass("active");
+        }
+        else {
+          $(this).addClass("active");
+        }
+
+        if ($("#grants_toggle").hasClass("active") && $("#activities_toggle").hasClass("active")){
+          settypeValue.filter(null);
+        }
+        else if ($("#grants_toggle").hasClass("active") ){
+          settypeValue.filter("Grants");
+        }
+        else if ($("#activities_toggle").hasClass("active")){
+          settypeValue.filter("Activities");
+        }
+        else {
+          settypeValue.filter("Nothing");
+        }
+      
+        geojson.setStyle(styleFunc);
+        dc.redrawAll();
+      });
+      */
+    });
+
+
+
+
+
+
+
+
+  
+});
+  
+</script>
+    
+</body>
+</html>
