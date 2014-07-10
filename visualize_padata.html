@@ -4,12 +4,12 @@
   <meta charset='utf-8'>
   <meta content='width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0' name='viewport'>
 
-  <title>SIKA-North Grants and Activities Visualization</title>
+  <title>A mini dc/d3/crossfilter visualization</title>
 
   <link href='//api.tiles.mapbox.com/mapbox.js/v1.5.1/mapbox.css' rel='stylesheet' />
 
   <script src='d3.min.js' type='text/javascript'></script>
-  <script src='crossfilter.js' type='text/javascript'></script>
+  <script src='crossfilter-latest.min.js' type='text/javascript'></script>
   <script src='dc.min.js' type='text/javascript'></script>
   <script src='jquery-1.9.1.min.js' type='text/javascript'></script>
   <script src='bootstrap.min.js' type='text/javascript'></script>
@@ -68,7 +68,7 @@
 <div class='container' id='main-container'>
 <div class='content'>
 <div class='container' style='font: 12px sans-serif;'>
-  <h1>SIKA-North Grants and Activities</h1>
+  <h1>A mini dc/d3/crossfilter visualization</h1>
   <div class='row'>
     <div class='span12' id='mapplace'>
       <div id="map"></div>
@@ -516,7 +516,7 @@ d3.csv("PA_Data_110m.csv", function (data) {
 
 
   map = L.mapbox.map('map', 'dai.ghijecig')
-     .setView([36.255, 69.258], 8);
+     .setView([10, 10], 2);
 
     markerLayer = L.mapbox.markerLayer().addTo(map);
 
@@ -550,8 +550,7 @@ d3.csv("PA_Data_110m.csv", function (data) {
 
         var color = 'grey';
         var weight = 1;
-
-        if ($.inArray(feature.properties['Country'], countryLayers)){
+        if ($.inArray(feature.properties['Country'], countryLayers) != -1){
           color = 'white';
           weight = 3;
         }
@@ -579,18 +578,24 @@ d3.csv("PA_Data_110m.csv", function (data) {
             layer.on({'click': function(e){
               //check if feature county is in array
               var countrybool = $.inArray( feature.properties['Country'], countryLayers );
-              console.log(countryLayers);
 
               //if it is then remove it
               //technically this shold work but need something better 
-              if (countrybool == true){
+              if (countrybool != -1){
                 countryLayers.splice( $.inArray(feature.properties['Country'], countryLayers), 1 );
               }
               else{
                 countryLayers.push(feature.properties['Country']); 
               }
-              countryValue.filter(countryLayers);
-              //geojson.setStyle(styleFunc);
+              if (countryLayers.length == 0){
+                countryValue.filterAll();
+              }
+              else {
+                console.log("doing the fitler again");
+
+                countryValue.filterFunction(function(d) {return $.inArray(d, countryLayers) != -1; });
+              }
+              geojson.setStyle(styleFunc);
               dc.redrawAll();
               
               }});
